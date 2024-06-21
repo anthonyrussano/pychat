@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shared Text Input</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            var socket = io();
+
+            socket.on('update_inputs', function (inputs) {
+                var inputList = document.getElementById('input_list');
+                inputList.innerHTML = '';
+                for (var i = 0; i < inputs.length; i++) {
+                    var li = document.createElement('li');
+                    li.textContent = inputs[i];
+                    inputList.appendChild(li);
+                }
+            });
+
+            document.getElementById('input_form').addEventListener('submit', function (e) {
+                e.preventDefault();
+                var userInput = document.getElementById('user_input').value;
+                socket.emit('submit_input', { user_input: userInput });
+                document.getElementById('user_input').value = '';
+            });
+        });
+    </script>
+</head>
+
+<body>
+    <h1>Shared Text Input Field</h1>
+    <form id="input_form">
+        <label for="user_input">Enter Text:</label>
+        <input type="text" id="user_input" name="user_input">
+        <button type="submit">Submit</button>
+    </form>
+    <h2>Submitted Inputs:</h2>
+    <ul id="input_list">
+        {% for input in inputs %}
+        <li>{{ input }}</li>
+        {% endfor %}
+    </ul>
+</body>
+
+</html>
