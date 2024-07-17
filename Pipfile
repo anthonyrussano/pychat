@@ -6,6 +6,8 @@ name = "pypi"
 [packages]
 flask = "*"
 flask-socketio = "*"
+python-socketio = {extras = ["asyncio"], version = "*"}
+aiohttp = "*"
 
 [dev-packages]
 

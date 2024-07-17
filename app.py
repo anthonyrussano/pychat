@@ -44,6 +44,14 @@ def index():
     return render_template("index.html", inputs=messages)
 
 
+@socketio.on("connect")
+def handle_connect():
+    print("Client connected, sending message history")
+    messages = get_messages()
+    print(f"Sending {len(messages)} messages")
+    emit("message_history", messages)
+
+
 @socketio.on("submit_input")
 def handle_input(data):
     user_input = data["user_input"]
